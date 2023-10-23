@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace identity.user;
@@ -42,6 +43,13 @@ public class UserController : ControllerBase
     var token = await UserService.LoginWithEmail(input.Email, input.Password);
 
     return Ok(token);
+  }
+
+  [HttpGet("authorization")]
+  [Authorize]
+  public IActionResult IsAuthorized()
+  {
+    return Ok("Acesso permitido!");
   }
 
 }
