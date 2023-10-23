@@ -9,9 +9,9 @@ namespace identity.user;
 
 public static class Initializer
 {
-  public static void InjectIdentity(this IServiceCollection services)
+  public static void InjectIdentity(this IServiceCollection services, IConfiguration Configuration)
   {
-    services.AddDbContext<UserDbContext>();
+    services.AddDbContext<UserDbContext>(options => options.UseNpgsql(Configuration["ConnectionStrings:UserConnection"]));
 
     services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<UserDbContext>()
@@ -25,7 +25,7 @@ public static class Initializer
       options.TokenValidationParameters = new()
       {
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("0xa3fa6d97f4807e145b37451fc344e58c")),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["SymmetricSecurityKey"] ?? "")),
         ValidateAudience = false,
         ValidateIssuer = false,
         ClockSkew = TimeSpan.Zero

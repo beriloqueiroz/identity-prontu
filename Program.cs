@@ -2,7 +2,7 @@ using identity.user;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.InjectIdentity();
+builder.Services.InjectIdentity(builder.Configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

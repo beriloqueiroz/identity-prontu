@@ -7,6 +7,11 @@ namespace identity.user;
 
 public class TokenService
 {
+  private readonly IConfiguration Configuration;
+  public TokenService(IConfiguration configuration)
+  {
+    Configuration = configuration;
+  }
   public string Generate(User user)
   {
 
@@ -17,7 +22,7 @@ public class TokenService
         new("externalId", user.ExternalId)
     };
 
-    var chave = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("0xa3fa6d97f4807e145b37451fc344e58c"));
+    var chave = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["SymmetricSecurityKey"] ?? ""));
 
     var signingCredentials = new SigningCredentials(chave, SecurityAlgorithms.HmacSha256);
 
